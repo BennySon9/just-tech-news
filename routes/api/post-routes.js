@@ -4,7 +4,6 @@ const { Post, User, Vote } = require("../../models");
 
 // GET/ALL /api/posts/ {"id": "//", "post_url": "//", "title": "//", "created_at": "//"}
 router.get("/", (req, res) => {
-  console.log("======================");
   Post.findAll({
     attributes: [
       "id",
