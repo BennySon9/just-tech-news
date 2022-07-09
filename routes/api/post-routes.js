@@ -1,10 +1,11 @@
 const router = require("express").Router();
 const sequelize = require("../../config/connection");
-const { Post, User, Vote } = require("../../models");
+const { Post, User, Vote, Comment } = require("../../models");
 
 // GET/ALL /api/posts/ {"id": "//", "post_url": "//", "title": "//", "created_at": "//"}
 router.get("/", (req, res) => {
   Post.findAll({
+    order: [["created_at", "DESC"]],
     attributes: [
       "id",
       "post_url",
@@ -17,8 +18,17 @@ router.get("/", (req, res) => {
         "vote_count",
       ],
     ],
-    order: [["created_at", "DESC"]],
     include: [
+      // include the Comment model here:
+      {
+        model: Comment,
+        attributes: ["id", "comment_text", "post_id", "user_id", "created_at"],
+        include: {
+          model: User,
+          attributes: ["username"],
+        },
+      },
+      // include the User model here
       {
         model: User,
         attributes: ["username"],
